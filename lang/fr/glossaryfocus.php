@@ -1,5 +1,4 @@
 <?php
-
 // This file is part of Moodle - http://moodle.org/
 //
 // Moodle is free software: you can redistribute it and/or modify
@@ -28,7 +27,6 @@ $string['modulename'] = 'Glossaire focus';
 $string['modulename_help'] = 'Ressources permettant de choisir des mots parmis un glossaire.';
 $string['modulenameplural'] = 'Glossaires focus';
 $string['pluginadministration'] = 'Administration glossaire focus';
-
 
 $string['select_idglossarymaster'] = 'Choix du glossaire maitre';
 $string['otp_all_master'] = 'Tous';

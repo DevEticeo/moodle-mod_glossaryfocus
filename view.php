@@ -1,5 +1,4 @@
 <?php
-
 // This file is part of the glossaryfocus module for Moodle - http://moodle.org/
 //
 // Moodle is free software: you can redistribute it and/or modify
@@ -29,16 +28,16 @@ require_once($CFG->dirroot.'/mod/glossaryfocus/lib.php');
 require_once($CFG->dirroot.'/mod/glossaryfocus/locallib.php');
 require_once($CFG->libdir.'/completionlib.php');
 
-$id = optional_param('id', 0, PARAM_INT); // Course Module ID
+$id = optional_param('id', 0, PARAM_INT); // Course Module ID.
 
 if (!$cm = get_coursemodule_from_id('glossaryfocus', $id)) {
     print_error('invalidcoursemodule');
 }
 
-$glossaryfocus = $DB->get_record('glossaryfocus', array('id'=>$cm->instance), '*', MUST_EXIST);
-$listWords = glossaryfocus_get_words_for_view($glossaryfocus);
+$glossaryfocus = $DB->get_record('glossaryfocus', array('id' => $cm->instance), '*', MUST_EXIST);
+$listwords = glossaryfocus_get_words_for_view($glossaryfocus);
 
-$course = $DB->get_record('course', array('id'=>$cm->course), '*', MUST_EXIST);
+$course = $DB->get_record('course', array('id' => $cm->course), '*', MUST_EXIST);
 
 require_course_login($course, true, $cm);
 $context = context_module::instance($cm->id);
@@ -64,10 +63,10 @@ $output = $PAGE->get_renderer('mod_glossaryfocus');
 echo $OUTPUT->header();
 echo $OUTPUT->heading(format_string($glossaryfocus->name), 2);
 
-$contentIntro = format_module_intro('glossaryfocus', $glossaryfocus, $cm->id);
-echo $OUTPUT->box($contentIntro, "generalbox center clearfix");
+$contentintro = format_module_intro('glossaryfocus', $glossaryfocus, $cm->id);
+echo $OUTPUT->box($contentintro, "generalbox center clearfix");
 
-echo $output->render_glossaryfocus_words($listWords, $cm->id);
+echo $output->render_glossaryfocus_words($listwords, $cm->id);
 
 
 echo $OUTPUT->footer();

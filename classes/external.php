@@ -1,5 +1,4 @@
 <?php
-
 // This file is part of Moodle - http://moodle.org/
 //
 // Moodle is free software: you can redistribute it and/or modify
@@ -61,28 +60,28 @@ class external extends \external_api {
     /**
      * Handles return the element's HTML.
      *
-     * @param $query        | string|null 
-     * @param $idglossary   |  int|null 
+     * @param $query        | string|null
+     * @param $idglossary   |  int|null
      *
      * @return array of words
      */
     public static function get_words($query, $idglossary) {
         global $DB;
-        
+
         $result = [];
         
         $params = array('query' => '%'.$query.'%');
-        $condition ="";
+        $condition = "";
         if ($idglossary > 0) {
             $condition .= " AND glossaryid = :glossaryid";
             $params['glossaryid'] = $idglossary;
         }
-        $listWords = $DB->get_records_sql("SELECT ge.id, ge.concept, g.name
+        $listwords = $DB->get_records_sql("SELECT ge.id, ge.concept, g.name
                                             FROM {glossary_entries} ge 
                                             INNER JOIN {glossary} g ON ge.glossaryid = g.id AND g.globalglossary = 1
                                             WHERE ".$DB->sql_like('concept', ':query')." ".$condition, $params);
 
-        foreach ($listWords as $word) {
+        foreach ($listwords as $word) {
             $result[] = ['id' => $word->id, 'name' => $word->concept.' ('.$word->name.')'];
         }
 

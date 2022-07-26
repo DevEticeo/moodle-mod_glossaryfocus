@@ -1,5 +1,4 @@
 <?php
-
 // This file is part of Moodle - http://moodle.org/
 //
 // Moodle is free software: you can redistribute it and/or modify
@@ -25,8 +24,6 @@
  */
 
 namespace mod_glossaryfocus\event;
-
-defined('MOODLE_INTERNAL') || die();
 
 /**
  * The course module instance list viewed event class.

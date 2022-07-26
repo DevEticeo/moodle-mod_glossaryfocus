@@ -71,8 +71,8 @@ class mod_glossaryfocus_mod_form extends moodleform_mod {
         $strwordsselected = "";
         $autocomplete = $mform->addElement('autocomplete', 'words',
             get_string('autocomplete_words','glossaryfocus'), [], $options);
-        foreach ($wordsselect as $index => $wordSelected) {
-            $autocomplete->addOption((string)$wordSelected, (int)$index);
+        foreach ($wordsselect as $index => $wordselected) {
+            $autocomplete->addOption((string)$wordselected, (int)$index);
             $strwordsselected .= $index.',';
         }
         $strwordsselected = substr($strwordsselected, 0, -1);

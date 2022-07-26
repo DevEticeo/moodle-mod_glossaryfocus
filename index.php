@@ -1,5 +1,4 @@
 <?php
-
 // This file is part of Moodle - http://moodle.org/
 //
 // Moodle is free software: you can redistribute it and/or modify
@@ -26,9 +25,9 @@
 
 require('../../config.php');
 
-$id = required_param('id', PARAM_INT); // course id
+$id = required_param('id', PARAM_INT); // Course id.
 
-$course = $DB->get_record('course', array('id'=>$id), '*', MUST_EXIST);
+$course = $DB->get_record('course', array('id' => $id), '*', MUST_EXIST);
 
 require_course_login($course, true);
 $PAGE->set_pagelayout('incourse');
@@ -88,7 +87,7 @@ foreach ($glossaryfocuss as $glossaryfocus) {
         $printsection = '<span class="smallinfo">'.userdate($glossaryfocus->timemodified)."</span>";
     }
 
-    $class = $glossaryfocus->visible ? '' : 'class="dimmed"'; // hidden modules are dimmed
+    $class = $glossaryfocus->visible ? '' : 'class="dimmed"'; // Hidden modules are dimmed.
 
     $table->data[] = array (
         $printsection,

@@ -1,5 +1,4 @@
 <?php
-
 // This file is part of Moodle - http://moodle.org/
 //
 // Moodle is free software: you can redistribute it and/or modify
@@ -28,11 +27,9 @@
 /**
  * Structure step to restore one glossaryfocus activity
  */
-class restore_glossaryfocus_activity_structure_step extends restore_activity_structure_step
-{
+class restore_glossaryfocus_activity_structure_step extends restore_activity_structure_step {
 
-    protected function define_structure()
-    {
+    protected function define_structure() {
 
         $paths = array();
         $userinfo = $this->get_setting_value('userinfo');
@@ -40,12 +37,11 @@ class restore_glossaryfocus_activity_structure_step extends restore_activity_str
         $paths[] = new restore_path_element('glossaryfocus', '/activity/glossaryfocus');
         $paths[] = new restore_path_element('glossaryfocus_entry', '/activity/glossaryfocus/entries/entry');
 
-        // Return the paths wrapped into standard activity structure
+        // Return the paths wrapped into standard activity structure.
         return $this->prepare_activity_structure($paths);
     }
 
-    protected function process_glossaryfocus($data)
-    {
+    protected function process_glossaryfocus($data) {
         global $DB;
 
         $data = (object)$data;
@@ -56,16 +52,16 @@ class restore_glossaryfocus_activity_structure_step extends restore_activity_str
         // See MDL-9367.
         $data->assesstimestart = $this->apply_date_offset($data->assesstimestart);
         $data->assesstimefinish = $this->apply_date_offset($data->assesstimefinish);
-        if ($data->scale < 0) { // scale found, get mapping
+        if ($data->scale < 0) { // Scale found, get mapping.
             $data->scale = -($this->get_mappingid('scale', abs($data->scale)));
         }
-        $formats = get_list_of_plugins('mod/glossaryfocus/formats'); // Check format
+        $formats = get_list_of_plugins('mod/glossaryfocus/formats'); // Check format.
         if (!in_array($data->displayformat, $formats)) {
             $data->displayformat = 'dictionary';
         }
         if (!empty($data->mainglossaryfocus) and $data->mainglossaryfocus == 1 and
             $DB->record_exists('glossaryfocus', array('mainglossaryfocus' => 1, 'course' => $this->get_courseid()))) {
-            // Only allow one main glossaryfocus in the course
+            // Only allow one main glossaryfocus in the course.
             $data->mainglossaryfocus = 0;
         }
 
@@ -74,8 +70,7 @@ class restore_glossaryfocus_activity_structure_step extends restore_activity_str
         $this->apply_activity_instance($newitemid);
     }
 
-    protected function process_glossaryfocus_entry($data)
-    {
+    protected function process_glossaryfocus_entry($data) {
         global $DB;
 
         $data = (object)$data;
@@ -85,13 +80,12 @@ class restore_glossaryfocus_activity_structure_step extends restore_activity_str
         $data->userid = $this->get_mappingid('user', $data->userid);
         $data->sourceglossaryfocusid = $this->get_mappingid('glossaryfocus', $data->sourceglossaryfocusid);
 
-        // insert the entry record
+        // Insert the entry record.
         $newitemid = $DB->insert_record('glossaryfocus_entries', $data);
-        $this->set_mapping('glossaryfocus_entry', $oldid, $newitemid, true); // childs and files by itemname
+        $this->set_mapping('glossaryfocus_entry', $oldid, $newitemid, true); // Childs and files by itemname.
     }
 
-    protected function process_glossaryfocus_alias($data)
-    {
+    protected function process_glossaryfocus_alias($data) {
         global $DB;
 
         $data = (object)$data;
@@ -102,13 +96,12 @@ class restore_glossaryfocus_activity_structure_step extends restore_activity_str
         $newitemid = $DB->insert_record('glossaryfocus_alias', $data);
     }
 
-    protected function process_glossaryfocus_rating($data)
-    {
+    protected function process_glossaryfocus_rating($data) {
         global $DB;
 
         $data = (object)$data;
 
-        // Cannot use ratings API, cause, it's missing the ability to specify times (modified/created)
+        // Cannot use ratings API, cause, it's missing the ability to specify times (modified/created).
         $data->contextid = $this->task->get_contextid();
         $data->itemid = $this->get_new_parentid('glossaryfocus_entry');
         if ($data->scaleid < 0) { // scale found, get mapping
@@ -129,11 +122,11 @@ class restore_glossaryfocus_activity_structure_step extends restore_activity_str
         $newitemid = $DB->insert_record('rating', $data);
     }
 
-    protected function process_glossaryfocus_entry_tag($data)
-    {
+    protected function process_glossaryfocus_entry_tag($data) {
         $data = (object)$data;
 
-        if (!core_tag_tag::is_enabled('mod_glossaryfocus', 'glossaryfocus_entries')) { // Tags disabled in server, nothing to process.
+        if (!core_tag_tag::is_enabled('mod_glossaryfocus', 'glossaryfocus_entries')) {
+            // Tags disabled in server, nothing to process.
             return;
         }
 

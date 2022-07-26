@@ -14,7 +14,6 @@
 // You should have received a copy of the GNU General Public License
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
-
 defined('MOODLE_INTERNAL') || die();
 
 /**
@@ -42,23 +41,25 @@ class mod_glossaryfocus_renderer extends plugin_renderer_base {
     }
 
     public function render_word($entrie, $cmid) {
-        //we need to find module context for this word.
-        $cmid = get_coursemodule_from_instance("glossary",$entrie->glossaryid)->id;
+        // We need to find module context for this word.
+        $cmid = get_coursemodule_from_instance("glossary", $entrie->glossaryid)->id;
         $context = context_module::instance($cmid);
 
         $res = "";
 
         $res .= html_writer::start_div("word");
-        $res .= html_writer::tag("h3",$entrie->concept,array("class"=>"bold"));
+        $res .= html_writer::tag("h3", $entrie->concept, array("class" => "bold"));
 
-        $res .= html_writer::start_div("def",array("class"=>"ml-4"));
+        $res .= html_writer::start_div("def", array("class" => "ml-4"));
 
-        $def = file_rewrite_pluginfile_urls($entrie->definition, 'pluginfile.php', $context->id, 'mod_glossary', 'entry', $entrie->id);
+        $def = file_rewrite_pluginfile_urls($entrie->definition, 'pluginfile.php', $context->id,
+                                            'mod_glossary', 'entry', $entrie->id);
 
         $def = format_text($def);
         $res .= $def;
         $res .= html_writer::end_div();
         $res .= html_writer::end_div("word");
+
         return $res;
     }
 }

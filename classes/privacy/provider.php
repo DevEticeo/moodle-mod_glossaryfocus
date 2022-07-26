@@ -24,8 +24,6 @@
  */
 namespace mod_glossaryfocus\privacy;
 
-defined('MOODLE_INTERNAL') || die();
-
 /**
  * The mod_glossaryfocus module does not store any data.
  *
