@@ -44,7 +44,7 @@ require_once($CFG->libdir."/externallib.php");
  */
 class external extends \external_api {
     /**
-     * Returns get_words() parameters.
+     * Returns glossaryfocus_get_words() parameters.
      *
      * @return \external_function_parameters
      */
@@ -79,7 +79,7 @@ class external extends \external_api {
         }
         $listWords = $DB->get_records_sql("SELECT ge.id, ge.concept, g.name
                                             FROM {glossary_entries} ge 
-                                            INNER JOIN {glossary} g ON (ge.glossaryid = g.id)
+                                            INNER JOIN {glossary} g ON ge.glossaryid = g.id AND g.globalglossary = 1
                                             WHERE ".$DB->sql_like('concept', ':query')." ".$condition, $params);
 
         foreach ($listWords as $word) {

@@ -16,24 +16,14 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * French strings for glossaryfocus
+ * Define all the backup steps that will be used by the backup_choice_activity_task
  *
  * @package    mod_glossaryfocus
  * @copyright  2021 Eticeo <https://eticeo.com>
  * @author     2021 Jeremy Carre <jeremy.carre@eticeo.fr>
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or late
  */
-$string['pluginname'] = '[Eticeo] Glossaire focus';
-$string['modulename'] = 'Glossaire focus';
-$string['modulename_help'] = 'Ressources permettant de choisir des mots parmis un glossaire.';
-$string['modulenameplural'] = 'Glossaires focus';
-$string['pluginadministration'] = 'Administration glossaire focus';
 
-
-$string['select_idglossarymaster'] = 'Choix du glossaire maitre';
-$string['otp_all_master'] = 'Tous';
-
-$string['autocomplete_words'] = 'Choix des mots à afficher';
-$string['autocomplete_allwords'] = 'Tous les mots dans le glossaire maitre';
-
-$string['privacy:metadata'] = 'Le module glossaire focus n\'affiche que les données existantes du glossaire.';
+// This activity has not particular settings but the inherited from the generic
+// backup_activity_task so here there isn't any class definition, like the ones
+// existing in /backup/moodle2/backup_settingslib.php (activities section)

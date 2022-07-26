@@ -1,5 +1,4 @@
 <?php
-
 // This file is part of Moodle - http://moodle.org/
 //
 // Moodle is free software: you can redistribute it and/or modify
@@ -16,24 +15,32 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * French strings for glossaryfocus
+ * Privacy Subsystem implementation for mod_glossaryfocus
  *
  * @package    mod_glossaryfocus
  * @copyright  2021 Eticeo <https://eticeo.com>
  * @author     2021 Jeremy Carre <jeremy.carre@eticeo.fr>
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or late
  */
-$string['pluginname'] = '[Eticeo] Glossaire focus';
-$string['modulename'] = 'Glossaire focus';
-$string['modulename_help'] = 'Ressources permettant de choisir des mots parmis un glossaire.';
-$string['modulenameplural'] = 'Glossaires focus';
-$string['pluginadministration'] = 'Administration glossaire focus';
+namespace mod_glossaryfocus\privacy;
 
+defined('MOODLE_INTERNAL') || die();
 
-$string['select_idglossarymaster'] = 'Choix du glossaire maitre';
-$string['otp_all_master'] = 'Tous';
-
-$string['autocomplete_words'] = 'Choix des mots à afficher';
-$string['autocomplete_allwords'] = 'Tous les mots dans le glossaire maitre';
-
-$string['privacy:metadata'] = 'Le module glossaire focus n\'affiche que les données existantes du glossaire.';
+/**
+ * The mod_glossaryfocus module does not store any data.
+ *
+ * @copyright  2021 Eticeo <https://eticeo.com>
+ * @author     2021 Jeremy Carre <jeremy.carre@eticeo.fr>
+ * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
+ */
+class provider implements \core_privacy\local\metadata\null_provider {
+    /**
+     * Get the language string identifier with the component's language
+     * file to explain why this plugin stores no data.
+     *
+     * @return  string
+     */
+    public static function get_reason() : string {
+        return 'privacy:metadata';
+    }
+}

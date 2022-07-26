@@ -51,9 +51,9 @@ class mod_glossaryfocus_mod_form extends moodleform_mod {
 
 
         //-------------------------------------------------------
-        //Pour glossaire maitre
+        //For the parent glossary
         $options = "";
-        $opt_glossarymaster = get_opt_glossarymaster();
+        $opt_glossarymaster = glossaryfocus_get_opt_glossarymaster();
         $mform->addElement('select', 'idglossarymaster', get_string('select_idglossarymaster', 'glossaryfocus'), $opt_glossarymaster, $options);
 
         //-------------------------------------------------------
@@ -61,22 +61,10 @@ class mod_glossaryfocus_mod_form extends moodleform_mod {
         $options = [
             'ajax' => 'mod_glossaryfocus/form-words-selector',
             'multiple' => true,
-            'noselectionstring' => get_string('autocomplete_allwords', 'glossaryfocus')/*,
-            'valuehtmlcallback' => function($value) {
-                global $DB, $OUTPUT;
-                $user = $DB->get_record('user', ['id' => (int)$value], '*', IGNORE_MISSING);
-                if (!$user || !user_can_view_profile($user)) {
-                    return false;
-                }
-                $details = user_get_user_details($user);
-                return $OUTPUT->render_from_template(
-                    'core_search/form-user-selector-suggestion', $details);
-            }*/
+            'noselectionstring' => get_string('autocomplete_allwords', 'glossaryfocus')
         ];
-        //$opt_glossarymaster = get_opt_glossarymaster();
         if ($this->_instance) {
-            $wordsSelect = get_words($this->current->instance);
-            //var_dump($wordsSelect);die;
+            $wordsSelect = glossaryfocus_get_words($this->current->instance);
         } else {
             $wordsSelect = [];
         }
@@ -84,18 +72,11 @@ class mod_glossaryfocus_mod_form extends moodleform_mod {
         $strWordsSelected = "";
         $autocomplete = $mform->addElement('autocomplete', 'words', get_string('autocomplete_words','glossaryfocus'), [], $options);
         foreach ($wordsSelect as $index => $wordSelected) {
-            //echo $wordSelected." ".$index;
             $autocomplete->addOption((string)$wordSelected, (int)$index);
             $strWordsSelected .= $index.',';
-            //$autocomplete->setValue("1,2");
-        }/*
-        $autocomplete->addOption("Vélo", 1);
-        $autocomplete->setValue(1);*/
+        }
         $strWordsSelected = substr($strWordsSelected, 0, -1);
         $autocomplete->setValue($strWordsSelected);
-
-        //var_dump($autocomplete->getValue());
-        //$mform->setDefault("words",$wordsSelect);
 
         //-------------------------------------------------------
         $this->standard_coursemodule_elements();
@@ -104,20 +85,5 @@ class mod_glossaryfocus_mod_form extends moodleform_mod {
         $this->add_action_buttons();
 
     }
-
-    /**
-     * Enforce defaults here.
-     *
-     * @param array $defaultvalues Form defaults
-     * @return void
-     **//*
-    public function data_preprocessing(&$defaultvalues) {
-        if (!empty($defaultvalues['displayoptions'])) {
-            $displayoptions = unserialize($defaultvalues['displayoptions']);
-            if (isset($displayoptions['printintro'])) {
-                $defaultvalues['printintro'] = $displayoptions['printintro'];
-            }
-        }
-    }*/
 }
 

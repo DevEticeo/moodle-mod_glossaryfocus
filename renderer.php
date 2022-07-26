@@ -44,8 +44,6 @@ class mod_glossaryfocus_renderer extends plugin_renderer_base {
     public function render_word($entrie, $cmid) {
         //we need to find module context for this word.
         $cmid = get_coursemodule_from_instance("glossary",$entrie->glossaryid)->id;
-        //var_dump($cmid);
-        //die;
         $context = context_module::instance($cmid);
 
         $res = "";

@@ -36,7 +36,7 @@ if (!$cm = get_coursemodule_from_id('glossaryfocus', $id)) {
 }
 
 $glossaryfocus = $DB->get_record('glossaryfocus', array('id'=>$cm->instance), '*', MUST_EXIST);
-$listWords = get_words_for_view($glossaryfocus);
+$listWords = glossaryfocus_get_words_for_view($glossaryfocus);
 
 $course = $DB->get_record('course', array('id'=>$cm->course), '*', MUST_EXIST);
 

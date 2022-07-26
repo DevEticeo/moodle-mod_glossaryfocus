@@ -35,3 +35,5 @@ $string['otp_all_master'] = 'All';
 
 $string['autocomplete_words'] = 'Select words to display';
 $string['autocomplete_allwords'] = 'All words in the master glossary';
+
+$string['privacy:metadata'] = 'The glossary focus modulee only displays existing glossary data.';
