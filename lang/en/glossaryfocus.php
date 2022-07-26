@@ -35,3 +35,4 @@ $string['autocomplete_words'] = 'Select words to display';
 $string['autocomplete_allwords'] = 'All words in the master glossary';
 
 $string['privacy:metadata'] = 'The glossary focus modulee only displays existing glossary data.';
+$string['glossaryfocus:addinstance'] = 'Add a new assignment';

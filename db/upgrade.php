@@ -23,7 +23,7 @@
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or late
  */
 
-function xmldb_glossary_upgrade($oldversion) {
+function xmldb_glossaryfocus_upgrade($oldversion) {
     global $DB;
 
     return true;

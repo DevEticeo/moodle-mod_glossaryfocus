@@ -35,3 +35,4 @@ $string['autocomplete_words'] = 'Choix des mots à afficher';
 $string['autocomplete_allwords'] = 'Tous les mots dans le glossaire maitre';
 
 $string['privacy:metadata'] = 'Le module glossaire focus n\'affiche que les données existantes du glossaire.';
+$string['glossaryfocus:addinstance'] = 'Ajouter une nouvelle instance';
