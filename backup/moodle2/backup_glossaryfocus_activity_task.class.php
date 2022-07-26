@@ -30,8 +30,7 @@ require_once($CFG->dirroot . '/mod/glossaryfocus/backup/moodle2/backup_glossaryf
 /**
  * Provides the steps to perform one complete backup of the Database instance
  */
-class backup_glossaryfocus_activity_task extends backup_activity_task
-{
+class backup_glossaryfocus_activity_task extends backup_activity_task {
     /**
      * No specific settings for this activity
      */
@@ -51,18 +50,18 @@ class backup_glossaryfocus_activity_task extends backup_activity_task
      * @param string $content some HTML text that eventually contains URLs to the activity instance scripts
      * @return string the content with the URLs encoded
      */
-    static public function encode_content_links($content) {
+     public static function encode_content_links($content) {
         global $CFG;
 
-        $base = preg_quote($CFG->wwwroot,"/");
+        $base = preg_quote($CFG->wwwroot, "/");
 
-        // Link to the list of glossaryfocus
-        $search="/(".$base."\/mod\/glossaryfocus\/index.php\?id\=)([0-9]+)/";
-        $content= preg_replace($search, '$@GLOSSARYFOCUSINDEX*$2@$', $content);
+        // Link to the list of glossaryfocus.
+        $search = "/(".$base."\/mod\/glossaryfocus\/index.php\?id\=)([0-9]+)/";
+        $content = preg_replace($search, '$@GLOSSARYFOCUSINDEX*$2@$', $content);
 
-        // Link to GLOSSARYFOCUS view by moduleid
-        $search="/(".$base."\/mod\/glossaryfocus\/view.php\?id\=)([0-9]+)/";
-        $content= preg_replace($search, '$@GLOSSARYFOCUSVIEWBYID*$2@$', $content);
+        // Link to GLOSSARYFOCUS view by moduleid.
+        $search = "/(".$base."\/mod\/glossaryfocus\/view.php\?id\=)([0-9]+)/";
+        $content = preg_replace($search, '$@GLOSSARYFOCUSVIEWBYID*$2@$', $content);
 
         return $content;
     }
