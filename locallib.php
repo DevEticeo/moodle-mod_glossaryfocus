@@ -77,12 +77,6 @@ function glossaryfocus_get_words($idglossaryfocus) {
                                         WHERE gfe.idglossaryfocus = :idglossaryfocus", array('idglossaryfocus' => $idglossaryfocus));
 
     foreach ($listwords as $word) {
-        $cm = get_coursemodule_from_id('glossary', $word->glossaryid);
-        if ($cm && $cm->id) {
-            $context = context_module::instance($cm->id);
-            require_capability('mod/glossary:view', $context);
-        }
-
         $res[$word->id] = $word->concept.' ('.$word->name.')';
     }
 

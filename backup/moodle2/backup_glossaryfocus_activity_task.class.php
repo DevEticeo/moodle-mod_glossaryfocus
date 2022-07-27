@@ -31,10 +31,13 @@ require_once($CFG->dirroot . '/mod/glossaryfocus/backup/moodle2/backup_glossaryf
  * Provides the steps to perform one complete backup of the Database instance
  */
 class backup_glossaryfocus_activity_task extends backup_activity_task {
+
+
     /**
-     * No specific settings for this activity
+     * Define (add) particular settings this activity can have
      */
     protected function define_my_settings() {
+        // No particular settings for this activity
     }
 
     /**

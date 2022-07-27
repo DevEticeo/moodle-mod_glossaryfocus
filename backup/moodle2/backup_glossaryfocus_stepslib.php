@@ -44,7 +44,7 @@ class backup_glossaryfocus_activity_structure_step extends backup_activity_struc
         // Define sources.
         $glossaryfocus->set_source_table('glossaryfocus', array('id' => backup::VAR_ACTIVITYID));
 
-        $entry->set_source_table('glossaryfocus_options', array('idglossaryfocus' => backup::VAR_PARENTID), 'id ASC');
+        $entry->set_source_table('glossaryfocus_entries', array('idglossaryfocus' => backup::VAR_ACTIVITYID), 'id ASC');
 
         // Define file annotations?
         $glossaryfocus->annotate_files('mod_glossaryfocus', 'intro', null); // This file area hasn't itemid.

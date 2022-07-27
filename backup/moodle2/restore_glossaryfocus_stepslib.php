@@ -23,17 +23,13 @@
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or late
  */
 
-
 /**
  * Structure step to restore one glossaryfocus activity
  */
 class restore_glossaryfocus_activity_structure_step extends restore_activity_structure_step {
 
     protected function define_structure() {
-
         $paths = array();
-        $userinfo = $this->get_setting_value('userinfo');
-
         $paths[] = new restore_path_element('glossaryfocus', '/activity/glossaryfocus');
         $paths[] = new restore_path_element('glossaryfocus_entry', '/activity/glossaryfocus/entries/entry');
 
@@ -48,25 +44,13 @@ class restore_glossaryfocus_activity_structure_step extends restore_activity_str
         $oldid = $data->id;
         $data->course = $this->get_courseid();
 
-        // Any changes to the list of dates that needs to be rolled should be same during course restore and course reset.
-        // See MDL-9367.
-        $data->assesstimestart = $this->apply_date_offset($data->assesstimestart);
-        $data->assesstimefinish = $this->apply_date_offset($data->assesstimefinish);
-        if ($data->scale < 0) { // Scale found, get mapping.
-            $data->scale = -($this->get_mappingid('scale', abs($data->scale)));
-        }
-        $formats = get_list_of_plugins('mod/glossaryfocus/formats'); // Check format.
-        if (!in_array($data->displayformat, $formats)) {
-            $data->displayformat = 'dictionary';
-        }
-        if (!empty($data->mainglossaryfocus) and $data->mainglossaryfocus == 1 and
-            $DB->record_exists('glossaryfocus', array('mainglossaryfocus' => 1, 'course' => $this->get_courseid()))) {
-            // Only allow one main glossaryfocus in the course.
-            $data->mainglossaryfocus = 0;
-        }
+        $data->timecreated = $this->apply_date_offset($data->timecreated);
+        $data->timemodified = $this->apply_date_offset($data->timemodified);
 
-        // insert the glossaryfocus record
+        // Insert the glossaryfocus record.
         $newitemid = $DB->insert_record('glossaryfocus', $data);
+
+        // Immediately after inserting record call this.
         $this->apply_activity_instance($newitemid);
     }
 
@@ -76,67 +60,23 @@ class restore_glossaryfocus_activity_structure_step extends restore_activity_str
         $data = (object)$data;
         $oldid = $data->id;
 
-        $data->glossaryfocusid = $this->get_new_parentid('glossaryfocus');
-        $data->userid = $this->get_mappingid('user', $data->userid);
-        $data->sourceglossaryfocusid = $this->get_mappingid('glossaryfocus', $data->sourceglossaryfocusid);
+        $data->idglossaryfocus = $this->get_new_parentid('glossaryfocus');
 
         // Insert the entry record.
         $newitemid = $DB->insert_record('glossaryfocus_entries', $data);
         $this->set_mapping('glossaryfocus_entry', $oldid, $newitemid, true); // Childs and files by itemname.
     }
 
-    protected function process_glossaryfocus_alias($data) {
-        global $DB;
+    /**
+     * Called immediately after all the other restore functions.
+     */
+    protected function after_execute() {
+        parent::after_execute();
 
-        $data = (object)$data;
-        $oldid = $data->id;
+        // Add the files.
+        $this->add_related_files('mod_glossaryfocus', 'intro', null);
 
-        $data->entryid = $this->get_new_parentid('glossaryfocus_entry');
-        $data->alias = $data->alias_text;
-        $newitemid = $DB->insert_record('glossaryfocus_alias', $data);
-    }
-
-    protected function process_glossaryfocus_rating($data) {
-        global $DB;
-
-        $data = (object)$data;
-
-        // Cannot use ratings API, cause, it's missing the ability to specify times (modified/created).
-        $data->contextid = $this->task->get_contextid();
-        $data->itemid = $this->get_new_parentid('glossaryfocus_entry');
-        if ($data->scaleid < 0) { // scale found, get mapping
-            $data->scaleid = -($this->get_mappingid('scale', abs($data->scaleid)));
-        }
-        $data->rating = $data->value;
-        $data->userid = $this->get_mappingid('user', $data->userid);
-
-        // Make sure that we have both component and ratingarea set. These were added in 2.1.
-        // Prior to that all ratings were for entries so we know what to set them too.
-        if (empty($data->component)) {
-            $data->component = 'mod_glossaryfocus';
-        }
-        if (empty($data->ratingarea)) {
-            $data->ratingarea = 'entry';
-        }
-
-        $newitemid = $DB->insert_record('rating', $data);
-    }
-
-    protected function process_glossaryfocus_entry_tag($data) {
-        $data = (object)$data;
-
-        if (!core_tag_tag::is_enabled('mod_glossaryfocus', 'glossaryfocus_entries')) {
-            // Tags disabled in server, nothing to process.
-            return;
-        }
-
-        $tag = $data->rawname;
-        if (!$itemid = $this->get_mappingid('glossaryfocus_entry', $data->itemid)) {
-            // Some orphaned tag, we could not find the glossaryfocus entry for it - ignore.
-            return;
-        }
-
-        $context = context_module::instance($this->task->get_moduleid());
-        core_tag_tag::add_item_tag('mod_glossaryfocus', 'glossaryfocus_entries', $itemid, $context, $tag);
+        // Add entries related files, matching by itemname (glossary_entry)
+         $this->add_related_files('mod_glossaryfocus', 'entry', 'glossaryfocus_entry');
     }
 }
