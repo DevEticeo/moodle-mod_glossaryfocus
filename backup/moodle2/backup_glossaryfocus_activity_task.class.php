@@ -26,12 +26,12 @@
 defined('MOODLE_INTERNAL') || die();
 
 require_once($CFG->dirroot . '/mod/glossaryfocus/backup/moodle2/backup_glossaryfocus_stepslib.php');
+require_once($CFG->dirroot . '/mod/glossaryfocus/backup/moodle2/backup_glossaryfocus_settingslib.php');
 
 /**
  * Provides the steps to perform one complete backup of the Database instance
  */
 class backup_glossaryfocus_activity_task extends backup_activity_task {
-
 
     /**
      * Define (add) particular settings this activity can have
@@ -53,7 +53,7 @@ class backup_glossaryfocus_activity_task extends backup_activity_task {
      * @param string $content some HTML text that eventually contains URLs to the activity instance scripts
      * @return string the content with the URLs encoded
      */
-    public static function encode_content_links($content) {
+    static public function encode_content_links($content) {
         global $CFG;
 
         $base = preg_quote($CFG->wwwroot, "/");

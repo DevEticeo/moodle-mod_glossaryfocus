@@ -38,7 +38,7 @@ function glossaryfocus_get_words_for_view($glossaryfocus) {
 
     $listwords = $DB->get_records_sql("SELECT ge.*
                                         FROM {glossaryfocus_entries} gfe 
-                                        INNER JOIN  {glossary_entries} ge ON (gfe.idglossaryentrie = ge.id)
+                                        INNER JOIN  {glossary_entries} ge ON (gfe.idglossaryentry = ge.id)
                                         WHERE gfe.idglossaryfocus = :glossaryfocusid 
                                         ORDER BY ge.concept", array('glossaryfocusid' => $glossaryfocus->id));
 
@@ -72,7 +72,7 @@ function glossaryfocus_get_words($idglossaryfocus) {
     $res = array();
     $listwords = $DB->get_records_sql("SELECT ge.id, ge.concept, g.name, g.id as glossaryid
                                         FROM {glossaryfocus_entries} gfe 
-                                        INNER JOIN {glossary_entries} ge ON (gfe.idglossaryentrie = ge.id) 
+                                        INNER JOIN {glossary_entries} ge ON (gfe.idglossaryentry = ge.id) 
                                         INNER JOIN {glossary} g ON (ge.glossaryid = g.id) AND g.globalglossary = 1
                                         WHERE gfe.idglossaryfocus = :idglossaryfocus", array('idglossaryfocus' => $idglossaryfocus));
 

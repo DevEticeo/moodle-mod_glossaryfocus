@@ -49,7 +49,7 @@ function glossaryfocus_add_instance($data, $mform) {
             // Now for each words selected insert it in glossaryfocus_entries.
             foreach ($data->words as $word) {
                 $DB->insert_record("glossaryfocus_entries",
-                    array("idglossaryfocus" => $data->id, "idglossaryentrie" => $word, "timecreated" => $data->timecreated));
+                    array("idglossaryfocus" => $data->id, "idglossaryentry" => $word, "timecreated" => $data->timecreated));
             }
         }
 
@@ -86,7 +86,7 @@ function glossaryfocus_update_instance($data, $mform) {
 
         // Now for each words selected insert it in glossaryfocus_entries.
         foreach ($data->words as $word) {
-            $DB->insert_record("glossaryfocus_entries", array("idglossaryfocus" => $data->id, "idglossaryentrie" => $word));
+            $DB->insert_record("glossaryfocus_entries", array("idglossaryfocus" => $data->id, "idglossaryentry" => $word));
         }
     } else {
         // We delete all.
@@ -159,7 +159,7 @@ function glossaryfocus_supports($feature) {
         case FEATURE_COMPLETION_TRACKS_VIEWS:
             return true;
         case FEATURE_BACKUP_MOODLE2:
-            return false;
+            return true;
         default:
             return null;
     }

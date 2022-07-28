@@ -15,7 +15,7 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * Define all the backup steps that will be used by the backup_choice_activity_task
+ * Defines backup_glossaryfocus_settingslib
  *
  * @package    mod_glossaryfocus
  * @copyright  2021 Eticeo <https://eticeo.com>

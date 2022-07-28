@@ -31,8 +31,8 @@ class mod_glossaryfocus_renderer extends plugin_renderer_base {
 
         $res .= html_writer::start_div("listWords");
 
-        foreach ($entries as $entrie) {
-            $res .= $this->render_word($entrie, $cmid);
+        foreach ($entries as $entry) {
+            $res .= $this->render_word($entry, $cmid);
         }
 
         $res .= html_writer::end_div();
@@ -40,20 +40,20 @@ class mod_glossaryfocus_renderer extends plugin_renderer_base {
         return $res;
     }
 
-    public function render_word($entrie, $cmid) {
+    public function render_word($entry, $cmid) {
         // We need to find module context for this word.
-        $cmid = get_coursemodule_from_instance("glossary", $entrie->glossaryid)->id;
+        $cmid = get_coursemodule_from_instance("glossary", $entry->glossaryid)->id;
         $context = context_module::instance($cmid);
 
         $res = "";
 
         $res .= html_writer::start_div("word");
-        $res .= html_writer::tag("h3", $entrie->concept, array("class" => "bold"));
+        $res .= html_writer::tag("h3", $entry->concept, array("class" => "bold"));
 
         $res .= html_writer::start_div("def", array("class" => "ml-4"));
 
-        $def = file_rewrite_pluginfile_urls($entrie->definition, 'pluginfile.php', $context->id,
-                                            'mod_glossary', 'entry', $entrie->id);
+        $def = file_rewrite_pluginfile_urls($entry->definition, 'pluginfile.php', $context->id,
+                                            'mod_glossary', 'entry', $entry->id);
 
         $def = format_text($def);
         $res .= $def;

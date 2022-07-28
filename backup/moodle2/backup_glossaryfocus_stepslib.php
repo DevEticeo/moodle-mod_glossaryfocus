@@ -29,13 +29,16 @@
 class backup_glossaryfocus_activity_structure_step extends backup_activity_structure_step {
 
     protected function define_structure() {
+        global $DB;
+
+        $DB->insert_record('glossaryfocus_entries', array('idglossaryfocus' => 1, 'idglossaryentry' => 0));
         // Define each element separated.
         $glossaryfocus = new backup_nested_element('glossaryfocus', array('id'),
             array('name', 'intro', 'introformat', 'idglossarymaster', 'timecreated', 'timemodified'));
 
         $entries = new backup_nested_element('entries');
 
-        $entry = new backup_nested_element('entry', array('id'), array('idglossaryentrie'));
+        $entry = new backup_nested_element('entry', array('id'), array('idglossaryentry'));
 
         // Build the tree.
         $glossaryfocus->add_child($entries);
@@ -44,7 +47,7 @@ class backup_glossaryfocus_activity_structure_step extends backup_activity_struc
         // Define sources.
         $glossaryfocus->set_source_table('glossaryfocus', array('id' => backup::VAR_ACTIVITYID));
 
-        $entry->set_source_table('glossaryfocus_entries', array('idglossaryfocus' => backup::VAR_ACTIVITYID), 'id ASC');
+        $entry->set_source_table('glossaryfocus_entries', array('idglossaryfocus' => backup::VAR_PARENTID), 'id ASC');
 
         // Define file annotations?
         $glossaryfocus->annotate_files('mod_glossaryfocus', 'intro', null); // This file area hasn't itemid.
