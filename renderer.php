@@ -32,7 +32,10 @@ class mod_glossaryfocus_renderer extends plugin_renderer_base {
         $res .= html_writer::start_div("listWords");
 
         foreach ($entries as $entry) {
-            $res .= $this->render_word($entry, $cmid);
+            $context = context_module::instance($entry->cmid);
+            if (has_capability('mod/glossary:view', $context)) {
+                $res .= $this->render_word($entry, $cmid);
+            }
         }
 
         $res .= html_writer::end_div();

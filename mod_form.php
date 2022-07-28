@@ -30,7 +30,7 @@ require_once($CFG->dirroot.'/mod/glossaryfocus/locallib.php');
 
 class mod_glossaryfocus_mod_form extends moodleform_mod {
     public function definition() {
-        global $CFG, $DB;
+        global $CFG, $DB, $PAGE;
 
         $mform = $this->_form;
 
@@ -38,6 +38,10 @@ class mod_glossaryfocus_mod_form extends moodleform_mod {
 
         // -------------------------------------------------------
         $mform->addElement('header', 'general', get_string('general', 'form'));
+
+        $mform->addElement('hidden', 'courseid', $PAGE->course->id);
+        $mform->setType('courseid', PARAM_RAW);
+
         $mform->addElement('text', 'name', get_string('name'), array('size' => '48'));
         if (!empty($CFG->formatstringstriptags)) {
             $mform->setType('name', PARAM_TEXT);
@@ -51,7 +55,7 @@ class mod_glossaryfocus_mod_form extends moodleform_mod {
         // -------------------------------------------------------
         // For the parent glossary
         $options = "";
-        $optglossarymaster = glossaryfocus_get_opt_glossarymaster();
+        $optglossarymaster = glossaryfocus_get_opt_glossarymaster($PAGE->course->id);
         $mform->addElement('select', 'idglossarymaster', get_string('select_idglossarymaster', 'glossaryfocus'),
             $optglossarymaster, $options);
 

@@ -53,6 +53,7 @@ class external extends \external_api {
                 'query' => new external_value(PARAM_TEXT,
                     'Query string (full or partial word name)'),
                 'idglossary' => new external_value(PARAM_INT, 'Glossary master id (0 if none)'),
+                'courseid' => new external_value(PARAM_INT, 'Course id where the glossaryfocus is (0 if none)'),
             )
         );
     }
@@ -65,8 +66,8 @@ class external extends \external_api {
      *
      * @return array of words
      */
-    public static function get_words($query, $idglossary) {
-        global $DB;
+    public static function get_words($query, $idglossary, $courseid) {
+        global $DB, $PAGE;
 
         $result = [];
         
@@ -76,10 +77,14 @@ class external extends \external_api {
             $condition .= " AND glossaryid = :glossaryid";
             $params['glossaryid'] = $idglossary;
         }
+        $condition .= " AND (g.globalglossary = 1 OR g.course = :courseid)";
+        $params['courseid'] = $courseid;
+
         $listwords = $DB->get_records_sql("SELECT ge.id, ge.concept, g.name
                                             FROM {glossary_entries} ge 
-                                            INNER JOIN {glossary} g ON ge.glossaryid = g.id AND g.globalglossary = 1
-                                            WHERE ".$DB->sql_like('concept', ':query')." ".$condition, $params);
+                                            INNER JOIN {glossary} g ON ge.glossaryid = g.id
+                                            WHERE ".$DB->sql_like('concept', ':query')." ".$condition.'
+                                            ORDER BY ge.concept, g.name', $params);
 
         foreach ($listwords as $word) {
             $result[] = ['id' => $word->id, 'name' => $word->concept.' ('.$word->name.')'];

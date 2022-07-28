@@ -50,7 +50,8 @@ define(['jquery', 'core/ajax'], function($, Ajax, Templates) {
                 methodname: 'mod_glossaryfocus_get_words',
                 args: {
                     query: query,
-                    idglossary: idglossary
+                    idglossary: idglossary,
+                    courseid: $('[name="courseid"]').val()
                 }
             }]);
 

@@ -36,27 +36,40 @@ require_once("$CFG->dirroot/mod/glossaryfocus/lib.php");
 function glossaryfocus_get_words_for_view($glossaryfocus) {
     global $DB;
 
-    $listwords = $DB->get_records_sql("SELECT ge.*
+    $listwords = $DB->get_records_sql("SELECT ge.*, cm.id as cmid
                                         FROM {glossaryfocus_entries} gfe 
                                         INNER JOIN  {glossary_entries} ge ON (gfe.idglossaryentry = ge.id)
+                                        INNER JOIN {glossary} g ON (ge.glossaryid = g.id)
+                                        INNER JOIN {course_modules} cm ON cm.course = g.course
+                                        INNER JOIN {modules} m ON m.id = cm.module AND m.name = 'glossary'
                                         WHERE gfe.idglossaryfocus = :glossaryfocusid 
+                                        GROUP BY ge.id
                                         ORDER BY ge.concept", array('glossaryfocusid' => $glossaryfocus->id));
 
     if (empty($listwords) && $glossaryfocus->idglossarymaster > 0) {
-        $listwords = $DB->get_records_sql("SELECT ge.*
+        $listwords = $DB->get_records_sql("SELECT ge.*, cm.id as cmid
                                             FROM {glossaryfocus} gf 
                                             INNER JOIN {glossary_entries} ge ON (gf.idglossarymaster = ge.glossaryid)
-                                            INNER JOIN {glossary} g ON ge.glossaryid = g.id AND g.globalglossary = 1
-                                            WHERE ge.glossaryid = :glossaryfocusid
+                                            INNER JOIN {glossary} g ON ge.glossaryid = g.id 
+                                            INNER JOIN {course_modules} cm ON cm.course = g.course
+                                            INNER JOIN {modules} m ON m.id = cm.module AND m.name = 'glossary'
+                                            WHERE ge.glossaryid = :glossaryfocusid AND (g.globalglossary = 1 OR g.course = :courseid)
+                                            GROUP BY ge.id
                                             ORDER BY ge.concept",
-                                            array('glossaryfocusid' => $glossaryfocus->idglossarymaster));
+                                            array('glossaryfocusid' => $glossaryfocus->idglossarymaster,
+                                                  'courseid' => $glossaryfocus->course));
     } else if (empty($listwords) && $glossaryfocus->idglossarymaster == 0) {
-        $listwords = $DB->get_records_sql("SELECT ge.*
+        $listwords = $DB->get_records_sql("SELECT ge.*, cm.id as cmid
                                             FROM {glossary_entries} ge 
-                                            INNER JOIN {glossary} g ON ge.glossaryid = g.id AND g.globalglossary = 1
-                                            ORDER BY ge.concept");
+                                            INNER JOIN {glossary} g ON ge.glossaryid = g.id
+                                            INNER JOIN {course_modules} cm ON cm.course = g.course
+                                            INNER JOIN {modules} m ON m.id = cm.module AND m.name = 'glossary'
+                                            WHERE g.globalglossary = 1 OR g.course = :courseid
+                                            GROUP BY ge.id
+                                            ORDER BY ge.concept",
+                                            array('courseid' => $glossaryfocus->course));
     }
-    
+
     return $listwords;
 }
 
@@ -73,8 +86,9 @@ function glossaryfocus_get_words($idglossaryfocus) {
     $listwords = $DB->get_records_sql("SELECT ge.id, ge.concept, g.name, g.id as glossaryid
                                         FROM {glossaryfocus_entries} gfe 
                                         INNER JOIN {glossary_entries} ge ON (gfe.idglossaryentry = ge.id) 
-                                        INNER JOIN {glossary} g ON (ge.glossaryid = g.id) AND g.globalglossary = 1
-                                        WHERE gfe.idglossaryfocus = :idglossaryfocus", array('idglossaryfocus' => $idglossaryfocus));
+                                        INNER JOIN {glossary} g ON (ge.glossaryid = g.id)
+                                        WHERE gfe.idglossaryfocus = :idglossaryfocus
+                                        ORDER BY ge.concept, g.name", array('idglossaryfocus' => $idglossaryfocus));
 
     foreach ($listwords as $word) {
         $res[$word->id] = $word->concept.' ('.$word->name.')';
@@ -88,11 +102,12 @@ function glossaryfocus_get_words($idglossaryfocus) {
  *
  * @return array of string
  */
-function glossaryfocus_get_opt_glossarymaster() {
+function glossaryfocus_get_opt_glossarymaster($courseid) {
     global $DB;
 
     $res = array();
-    $glossariesmaster = $DB->get_records("glossary", array('globalglossary' => 1));
+    $glossariesmaster = $DB->get_records_sql("SELECT g.* FROM {glossary} g WHERE g.globalglossary = 1 OR g.course = :courseid ORDER BY g.name",
+                                                array('courseid' => $courseid));
 
     $res[0] = get_string("otp_all_master", "glossaryfocus");
     foreach ($glossariesmaster as $glossary) {
