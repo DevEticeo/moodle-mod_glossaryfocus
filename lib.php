@@ -23,8 +23,6 @@
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or late
  */
 
-defined('MOODLE_INTERNAL') || die('Direct access to this script is forbidden.');
-
 /**
  * Add glossaryfocus instance.
  *
@@ -37,7 +35,7 @@ function glossaryfocus_add_instance($data, $mform) {
 
     $data->timemodified = time();
     $data->timecreated = time();
-    // need to work with list of words
+    // Need to work with list of words.
     $save = $data->words;
     $data->words = "";
 
@@ -119,7 +117,7 @@ function glossaryfocus_delete_instance($id) {
 
     // Ensure the glossaryfocus_entries exists.
     if (!$glossaryfocus = $DB->get_records('glossaryfocus_entries', array('idglossaryfocus' => $id))) {
-        // We don't, so it's over
+        // We don't, so it's over.
         return true;
     }
 

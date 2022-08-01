@@ -26,14 +26,14 @@
 
 defined('MOODLE_INTERNAL') || die('Direct access to this script is forbidden.');
 
-$plugin->version   = 2022072800;
+$plugin->version   = 2021102604;
 $plugin->requires  = 2020110906;
 $plugin->component = 'mod_glossaryfocus';
 
 $plugin->maturity  = MATURITY_STABLE;
-$plugin->release   = "1.1";
+$plugin->release   = "1.0";
 
-// This plugin need glossary
+// This plugin need glossary.
 $plugin->dependencies = array(
     'mod_glossary'  => 2020110900,
 );

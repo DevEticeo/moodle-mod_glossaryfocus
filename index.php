@@ -33,7 +33,8 @@ require_course_login($course, true);
 $PAGE->set_pagelayout('incourse');
 
 // Trigger instances list viewed event.
-$event = \mod_glossaryfocus\event\course_module_instance_list_viewed::create(array('context' => context_course::instance($course->id)));
+$event = \mod_glossaryfocus\event\course_module_instance_list_viewed::create(
+            array('context' => context_course::instance($course->id)));
 $event->add_record_snapshot('course', $course);
 $event->trigger();
 

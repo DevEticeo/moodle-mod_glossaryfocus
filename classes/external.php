@@ -67,7 +67,9 @@ class external extends \external_api {
      * @return array of words
      */
     public static function get_words($query, $idglossary, $courseid) {
-        global $DB, $PAGE;
+        global $DB, $CFG;
+
+        require_once($CFG->dirroot.'/mod/glossaryfocus/lib.php');
 
         $result = [];
         
@@ -80,14 +82,19 @@ class external extends \external_api {
         $condition .= " AND (g.globalglossary = 1 OR g.course = :courseid)";
         $params['courseid'] = $courseid;
 
-        $listwords = $DB->get_records_sql("SELECT ge.id, ge.concept, g.name
+        $listwords = $DB->get_records_sql("SELECT ge.id, ge.concept, g.name, cm.id as cmid
                                             FROM {glossary_entries} ge 
                                             INNER JOIN {glossary} g ON ge.glossaryid = g.id
+                                            INNER JOIN {course_modules} cm ON cm.course = g.course
+                                            INNER JOIN {modules} m ON m.id = cm.module AND m.name = 'glossary'
                                             WHERE ".$DB->sql_like('concept', ':query')." ".$condition.'
                                             ORDER BY ge.concept, g.name', $params);
 
         foreach ($listwords as $word) {
-            $result[] = ['id' => $word->id, 'name' => $word->concept.' ('.$word->name.')'];
+            $context = \context_module::instance($word->cmid);
+            if (has_capability('mod/glossary:view', $context)) {
+                $result[] = ['id' => $word->id, 'name' => $word->concept.' ('.$word->name.')'];
+            }
         }
 
         return $result;

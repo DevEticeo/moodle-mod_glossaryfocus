@@ -53,7 +53,8 @@ function glossaryfocus_get_words_for_view($glossaryfocus) {
                                             INNER JOIN {glossary} g ON ge.glossaryid = g.id 
                                             INNER JOIN {course_modules} cm ON cm.course = g.course
                                             INNER JOIN {modules} m ON m.id = cm.module AND m.name = 'glossary'
-                                            WHERE ge.glossaryid = :glossaryfocusid AND (g.globalglossary = 1 OR g.course = :courseid)
+                                            WHERE ge.glossaryid = :glossaryfocusid 
+                                            AND (g.globalglossary = 1 OR g.course = :courseid)
                                             GROUP BY ge.id
                                             ORDER BY ge.concept",
                                             array('glossaryfocusid' => $glossaryfocus->idglossarymaster,
@@ -106,7 +107,9 @@ function glossaryfocus_get_opt_glossarymaster($courseid) {
     global $DB;
 
     $res = array();
-    $glossariesmaster = $DB->get_records_sql("SELECT g.* FROM {glossary} g WHERE g.globalglossary = 1 OR g.course = :courseid ORDER BY g.name",
+    $glossariesmaster = $DB->get_records_sql("SELECT g.* FROM {glossary} g 
+                                                WHERE g.globalglossary = 1 OR g.course = :courseid 
+                                                ORDER BY g.name",
                                                 array('courseid' => $courseid));
 
     $res[0] = get_string("otp_all_master", "glossaryfocus");

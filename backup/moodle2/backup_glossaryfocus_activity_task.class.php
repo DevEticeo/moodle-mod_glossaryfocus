@@ -37,7 +37,7 @@ class backup_glossaryfocus_activity_task extends backup_activity_task {
      * Define (add) particular settings this activity can have
      */
     protected function define_my_settings() {
-        // No particular settings for this activity
+        // No particular settings for this activity.
     }
 
     /**
@@ -53,7 +53,7 @@ class backup_glossaryfocus_activity_task extends backup_activity_task {
      * @param string $content some HTML text that eventually contains URLs to the activity instance scripts
      * @return string the content with the URLs encoded
      */
-    static public function encode_content_links($content) {
+     public static function encode_content_links($content) {
         global $CFG;
 
         $base = preg_quote($CFG->wwwroot, "/");

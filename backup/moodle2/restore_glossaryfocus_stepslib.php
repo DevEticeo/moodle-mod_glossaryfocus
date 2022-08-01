@@ -76,7 +76,7 @@ class restore_glossaryfocus_activity_structure_step extends restore_activity_str
         // Add the files.
         $this->add_related_files('mod_glossaryfocus', 'intro', null);
 
-        // Add entries related files, matching by itemname (glossary_entry)
+        // Add entries related files, matching by itemname (glossary_entry).
          $this->add_related_files('mod_glossaryfocus', 'entry', 'glossaryfocus_entry');
     }
 }

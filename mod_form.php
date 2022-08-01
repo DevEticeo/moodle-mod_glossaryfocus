@@ -40,7 +40,7 @@ class mod_glossaryfocus_mod_form extends moodleform_mod {
         $mform->addElement('header', 'general', get_string('general', 'form'));
 
         $mform->addElement('hidden', 'courseid', $PAGE->course->id);
-        $mform->setType('courseid', PARAM_RAW);
+        $mform->setType('courseid', PARAM_INT);
 
         $mform->addElement('text', 'name', get_string('name'), array('size' => '48'));
         if (!empty($CFG->formatstringstriptags)) {
@@ -53,14 +53,14 @@ class mod_glossaryfocus_mod_form extends moodleform_mod {
         $this->standard_intro_elements();
 
         // -------------------------------------------------------
-        // For the parent glossary
+        // For the parent glossary.
         $options = "";
         $optglossarymaster = glossaryfocus_get_opt_glossarymaster($PAGE->course->id);
         $mform->addElement('select', 'idglossarymaster', get_string('select_idglossarymaster', 'glossaryfocus'),
             $optglossarymaster, $options);
 
         // -------------------------------------------------------
-        // AJAX to search for a word according to the letters entered
+        // AJAX to search for a word according to the letters entered.
         $options = [
             'ajax' => 'mod_glossaryfocus/form-words-selector',
             'multiple' => true,
@@ -74,7 +74,7 @@ class mod_glossaryfocus_mod_form extends moodleform_mod {
 
         $strwordsselected = "";
         $autocomplete = $mform->addElement('autocomplete', 'words',
-            get_string('autocomplete_words','glossaryfocus'), [], $options);
+            get_string('autocomplete_words', 'glossaryfocus'), [], $options);
         foreach ($wordsselect as $index => $wordselected) {
             $autocomplete->addOption((string)$wordselected, (int)$index);
             $strwordsselected .= $index.',';
